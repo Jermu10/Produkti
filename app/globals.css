@@ -1,23 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Chicle&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7e7de;
+  --foreground: #617536;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #f7e7de;
+    --foreground: #617536;
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Chicle', Helvetica, sans-serif;
 }
 
 @layer utilities {
