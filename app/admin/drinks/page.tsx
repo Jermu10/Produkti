@@ -1,15 +1,20 @@
 import Button from "@/components/Button";
 import prisma from "@/lib/db";
+
 import Link from "next/link";
 
+import DeleteButton from "@/components/DeleteButton";
+import { getDrinks } from "../actions/drink.actions";
+
 const DrinksPage = async () => {
-  const drinks = await prisma.drink.findMany();
+  const drinks = await getDrinks();
 
   return (
     <>
-      <div className="flex mt-10 justify-end">
-        <Button text="Lisää drinkki" link="/admin/drinks/create-drink" />
-      </div>
+      <Button>
+        <Link href="/admin/drinks/create-drink">Luo drinkki</Link>
+      </Button>
+
       <div className="flex items-center justify-center min-h-screen">
         <div className="bg-white p-8 rounded shadow-md w-full max-w-2xl">
           <h1 className="text-3xl font-bold mb-6 text-center">Drinks List</h1>
@@ -25,6 +30,7 @@ const DrinksPage = async () => {
                     <p className="mt-2">{drink.instructions}</p>
                   </div>
                 </Link>
+                <DeleteButton id={drink.id} />
               </li>
             ))}
           </ul>
