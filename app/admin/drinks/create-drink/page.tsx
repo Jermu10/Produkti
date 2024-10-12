@@ -6,7 +6,7 @@ import DrinkForm from "@/components/DrinkForm";
 const CreateDrinkPage = () => {
   return (
     <>
-      <Button>
+      <Button className="bg-customOrange px-3 py-1 mb-5">
         <Link href="/admin/drinks/">Takaisin</Link>
       </Button>
       <DrinkForm />;

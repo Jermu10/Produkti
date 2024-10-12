@@ -11,7 +11,7 @@ const DrinkPage = async ({ params: { id } }: { params: { id: string } }) => {
 
   return (
     <>
-      <Button>
+      <Button className="bg-customOrange py-1 px-3 mb-5">
         <Link href="/admin/drinks/">Takaisin</Link>
       </Button>
       <DrinkForm

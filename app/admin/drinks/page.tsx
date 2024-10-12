@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import prisma from "@/lib/db";
+
 import Link from "next/link";
 import { deleteDrink, getDrinks } from "../actions/drink.actions";
 import DrinkList from "@/components/DrinkList";
@@ -9,7 +9,7 @@ const DrinksPage = async () => {
 
   return (
     <>
-      <Button>
+      <Button className="bg-customOrange px-3 py-1">
         <Link href="/admin/drinks/create-drink">Luo drinkki</Link>
       </Button>
 

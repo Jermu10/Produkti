@@ -139,7 +139,7 @@ const DrinkForm = ({ initialData, isEditMode = false }: DrinkFormProps) => {
         <input
           type="submit"
           value={isEditMode ? "Päivitä" : "Lähetä"}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer"
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer"
         />
       </div>
     </form>
