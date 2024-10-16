@@ -22,7 +22,10 @@ const DrinkItem: React.FC<DrinkItemProps> = ({ drink }) => {
           <p className="mt-2">{drink.instructions}</p>
         </div>
       </Link>
-      <Button className="bg-red-500 px-4 py-2 mt-4" onClick={handleDelete}>
+      <Button
+        className="bg-red-500 px-3 py-1 mt-2 hover:bg-red-600"
+        onClick={handleDelete}
+      >
         Delete
       </Button>
     </li>
