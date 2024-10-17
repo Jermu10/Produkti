@@ -11,6 +11,8 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        customOrange: "#FD945F",
+        hoverOrange: "#e3733b",
       },
     },
   },

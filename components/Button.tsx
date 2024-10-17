@@ -5,7 +5,7 @@ const Button = ({ children, className, onClick }: ButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className={`text-white rounded cursor-pointer ${className}`}
+      className={`text-white rounded cursor-pointer hover:bg-hoverOrange ${className}`}
     >
       {children}
     </button>
