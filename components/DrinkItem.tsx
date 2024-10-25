@@ -3,14 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import Button from "./Button";
-import { deleteDrink } from "@/app/admin/actions/drink.actions";
+
 import { formatIngredients } from "@/lib/utils";
 
 const DrinkItem: React.FC<DrinkItemProps> = ({ drink }) => {
-  const handleDelete = async () => {
-    await deleteDrink(drink.id);
-  };
-
   return (
     <li key={drink.id} className="border-b pb-4">
       <Link href={`/admin/drinks/${drink.id}`}>
@@ -22,12 +18,6 @@ const DrinkItem: React.FC<DrinkItemProps> = ({ drink }) => {
           <p className="mt-2">{drink.instructions}</p>
         </div>
       </Link>
-      <Button
-        className="bg-red-500 px-3 py-1 mt-2 hover:bg-red-600"
-        onClick={handleDelete}
-      >
-        Delete
-      </Button>
     </li>
   );
 };

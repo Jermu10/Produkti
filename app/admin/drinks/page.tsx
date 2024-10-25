@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 
 import Link from "next/link";
-import { deleteDrink, getDrinks } from "../actions/drink.actions";
+import { getDrinks } from "../actions/drink.actions";
 import DrinkList from "@/components/DrinkList";
 
 const DrinksPage = async () => {
