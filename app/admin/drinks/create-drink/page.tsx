@@ -7,7 +7,7 @@ const CreateDrinkPage = () => {
   return (
     <>
       <Button className="bg-customOrange px-3 py-1 mb-5">
-        <Link href="/admin/drinks/">Takaisin</Link>
+        <Link href="/admin/">Takaisin</Link>
       </Button>
       <DrinkForm />;
     </>

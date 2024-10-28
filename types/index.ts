@@ -25,6 +25,8 @@ declare type DrinkListProps = {
     name: string;
     ingredients: any;
     instructions: string;
+    slug: string;
+    category: string;
   }[];
 };
 
@@ -34,5 +36,19 @@ declare type DrinkItemProps = {
     name: string;
     ingredients: any;
     instructions: string;
+    slug: string;
+    category: string;
   };
 };
+
+interface HeaderProps {
+  text: string;
+}
+
+interface IngredientsBoxProps {
+  ingredients: Record<string, string>;
+}
+
+interface InstructionsBoxProps {
+  instructions: string;
+}

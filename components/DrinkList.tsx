@@ -1,15 +1,16 @@
 "use client";
 
 import React from "react";
-import DrinkItem from "./DrinkItem";
+
+import DrinkCard from "./DrinkCard";
 
 const DrinkList: React.FC<DrinkListProps> = ({ drinks }) => {
   return (
-    <ul className="space-y-4">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
       {drinks.map((drink) => (
-        <DrinkItem key={drink.id} drink={drink} />
+        <DrinkCard drink={drink} />
       ))}
-    </ul>
+    </div>
   );
 };
 

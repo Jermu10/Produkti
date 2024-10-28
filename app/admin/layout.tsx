@@ -5,14 +5,14 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import AdminNavbar from "./components/AdminNavbar";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <ClerkProvider>
       <SignedIn>
-        <div className="absolute top-4 right-4">
-          <UserButton />
-        </div>
+        <AdminNavbar />
+
         {children}
       </SignedIn>
       <SignedOut>

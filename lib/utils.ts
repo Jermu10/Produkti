@@ -5,3 +5,9 @@ export const formatIngredients = (
     .map(([key, value]) => `${key} : ${value}`)
     .join(", ");
 };
+
+export const formatCardIngredients = (
+  ingredients: Record<string, string>
+): string => {
+  return Object.keys(ingredients).join(", ");
+};
