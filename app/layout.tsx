@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { NextUIProvider } from "@nextui-org/react";
+import CustomNavbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Drinkkilinkki",
@@ -14,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="relative min-h-screen">{children}</div>
+        <NextUIProvider>
+          <div className="relative min-h-screen">{children}</div>
+        </NextUIProvider>
       </body>
     </html>
   );
