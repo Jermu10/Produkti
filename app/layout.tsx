@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { NextUIProvider } from "@nextui-org/react";
-import CustomNavbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Drinkkilinkki",

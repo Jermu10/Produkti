@@ -15,7 +15,7 @@ import { UserButton } from "@clerk/nextjs";
 const AdminNavbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  const menuItems = ["drinks", "moctails"];
+  const menuItems = ["drinkit", "mocktailit", "arvostelut"];
 
   return (
     <Navbar
@@ -36,7 +36,7 @@ const AdminNavbar: React.FC = () => {
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {menuItems.map((item, index) => (
-          <Link color="foreground" href={`/admin/${item}`}>
+          <Link key={index} color="foreground" href={`/admin/${item}`}>
             <NavbarItem key={index}>{item}</NavbarItem>
           </Link>
         ))}

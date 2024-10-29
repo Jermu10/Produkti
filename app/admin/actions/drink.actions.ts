@@ -16,6 +16,7 @@ export async function getDrink(id: string) {
 
 export async function getDrinks() {
   const drinks = await prisma.drink.findMany();
+  if (drinks == null) return notFound();
   return drinks;
 }
 
