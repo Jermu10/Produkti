@@ -46,7 +46,12 @@ const CustomNavbar: React.FC = () => {
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
-            <Link color="foreground" className="w-full" href="#" size="lg">
+            <Link
+              color="foreground"
+              className="w-full"
+              href={`/${item}`}
+              size="lg"
+            >
               {item}
             </Link>
           </NavbarMenuItem>
