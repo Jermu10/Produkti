@@ -4,10 +4,10 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 
-export async function getDrink(id: string) {
+export async function getDrink(slug: string) {
   const drink = await prisma.drink.findUnique({
     where: {
-      id: id,
+      slug: slug,
     },
   });
   if (drink == null) return notFound();

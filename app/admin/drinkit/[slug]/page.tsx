@@ -6,8 +6,12 @@ import { notFound } from "next/navigation";
 import DrinkForm from "@/components/DrinkForm";
 import { getDrink } from "../../actions/drink.actions";
 
-const DrinkPage = async ({ params: { id } }: { params: { id: string } }) => {
-  const drink = await getDrink(id);
+const DrinkPage = async ({
+  params: { slug },
+}: {
+  params: { slug: string };
+}) => {
+  const drink = await getDrink(slug);
 
   return (
     <>

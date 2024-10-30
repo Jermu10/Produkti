@@ -56,6 +56,7 @@ interface InstructionsBoxProps {
 interface ReviewListProps {
   review: {
     drink: string;
+    slug: string;
     rating: number;
     creator: string;
     introduction: string;
