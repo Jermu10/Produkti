@@ -12,7 +12,7 @@ import {
 } from "@nextui-org/react";
 import { useRef, FormEvent, useTransition } from "react";
 
-const ReviewsModalForm = () => {
+const NewReviewForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
@@ -86,4 +86,4 @@ const ReviewsModalForm = () => {
   );
 };
 
-export default ReviewsModalForm;
+export default NewReviewForm;

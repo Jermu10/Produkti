@@ -52,3 +52,12 @@ interface IngredientsBoxProps {
 interface InstructionsBoxProps {
   instructions: string;
 }
+
+interface ReviewListProps {
+  review: {
+    drink: string;
+    rating: number;
+    creator: string;
+    introduction: string;
+  };
+}

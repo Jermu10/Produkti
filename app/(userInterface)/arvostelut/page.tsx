@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import React from "react";
 import { getAllReviews } from "../actions/reviews.actions";
+import ReviewCard from "@/components/ReviewCard";
 
 const ReviewPage = async () => {
   const reviews = await getAllReviews();
@@ -8,10 +9,9 @@ const ReviewPage = async () => {
   return (
     <>
       <Header text="Arvostelut" />
-
-      <div>
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-2 md:mt-20  justify-center ">
         {reviews.map((review) => (
-          <p>{review.drink}</p>
+          <ReviewCard key={review.id} review={review} />
         ))}
       </div>
     </>
