@@ -1,8 +1,37 @@
-"use server";
-
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
+
+export async function getAllUserDrinks() {
+  const drinks = await prisma.drink.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  if (drinks == null) return notFound();
+  return drinks;
+}
+
+export async function getUserDrinks() {
+  const drinks = await prisma.drink.findMany({
+    where: {
+      category: "drinkki",
+    },
+  });
+  if (drinks == null) return notFound();
+
+  return drinks;
+}
+
+export async function getUserMoctails() {
+  const moctails = await prisma.drink.findMany({
+    where: {
+      category: "mocktail",
+    },
+  });
+  if (moctails == null) return notFound();
+  return moctails;
+}
 
 export async function getDrink(slug: string) {
   const drink = await prisma.drink.findUnique({
@@ -27,13 +56,15 @@ export async function createDrink(formData: FormData) {
         name: formData.get("name") as string,
         slug: (formData.get("name") as string)
           .toLowerCase()
+          .replace(/ä/g, "a")
+          .replace(/ö/g, "o")
           .replace(/\s+/g, "-"),
         category: formData.get("category") as string,
         ingredients: JSON.parse(formData.get("ingredients") as string),
         instructions: formData.get("instructions") as string,
       },
     });
-    redirect("/admin/drinks");
+    redirect("/admin/drinkit");
   } catch (error) {
     console.error("Failed to create drink:", error);
   }
@@ -48,6 +79,8 @@ export async function editDrink(formData: FormData) {
         name: formData.get("name") as string,
         slug: (formData.get("name") as string)
           .toLowerCase()
+          .replace(/ä/g, "a")
+          .replace(/ö/g, "o")
           .replace(/\s+/g, "-"),
         category: formData.get("category") as string,
         ingredients: JSON.parse(formData.get("ingredients") as string),
@@ -62,7 +95,7 @@ export async function editDrink(formData: FormData) {
 export async function deleteDrink(id: string) {
   try {
     await prisma.drink.delete({ where: { id } });
-    revalidatePath("/admin/drinks");
+    revalidatePath("/admin/drinkit");
   } catch (error) {
     console.error("Failed to delete drink:", error);
   }
