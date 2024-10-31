@@ -53,12 +53,29 @@ interface InstructionsBoxProps {
   instructions: string;
 }
 
-interface ReviewListProps {
+interface ReviewCardProps {
   review: {
-    drink: string;
+    id: string;
     slug: string;
-    rating: number;
-    creator: string;
+    createdAt: Date;
+    updatedAt: Date;
+    creator: string | null;
+    drink: string;
+    review: string;
+    rating: string;
     introduction: string;
   };
+}
+
+interface ReviewData {
+  drink: string;
+  slug: string;
+  rating: string;
+  introduction: string;
+  review: string;
+}
+
+interface ReviewResult {
+  success?: string;
+  error?: string;
 }

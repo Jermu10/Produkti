@@ -1,4 +1,5 @@
 "use client";
+import { formatLastUpdated } from "@/lib/utils";
 import {
   Card,
   CardHeader,
@@ -9,7 +10,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const ReviewCard: React.FC<ReviewListProps> = ({ review }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
   const pathname = usePathname();
 
   return (
@@ -26,11 +27,13 @@ const ReviewCard: React.FC<ReviewListProps> = ({ review }) => {
         </CardBody>
         <Divider />
         <CardFooter>
-          <div className="flex h-5 items-center  space-x-4 text-xl ">
-            <p>{review.rating}</p>
+          <div className="flex h-5 items-center  space-x-4 text-lg ">
+            <p>{review.rating}/5</p>
+            <Divider orientation="vertical" />
+            <p>{review.creator}</p>
             <Divider orientation="vertical" />
 
-            <p>{review.creator}</p>
+            <p>{formatLastUpdated(review.createdAt, review.updatedAt)}</p>
           </div>
         </CardFooter>
       </Link>

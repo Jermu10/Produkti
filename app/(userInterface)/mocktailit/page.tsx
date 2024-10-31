@@ -1,5 +1,5 @@
 import React from "react";
-import { getUserMoctails } from "../actions/drink.actions";
+import { getUserMoctails } from "../../actions/drink.actions";
 import DrinkList from "@/components/DrinkList";
 import Header from "@/components/Header";
 

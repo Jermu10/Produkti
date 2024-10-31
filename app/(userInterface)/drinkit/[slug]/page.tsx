@@ -1,5 +1,5 @@
 import React from "react";
-import { getUserDrink } from "../../actions/drink.actions";
+import { getDrink } from "../../../actions/drink.actions";
 
 import UserIngredientsBox from "../../components/UserIngredientsBox";
 import Header from "@/components/Header";
@@ -10,7 +10,7 @@ const DrinkPage = async ({
 }: {
   params: { slug: string };
 }) => {
-  const drink = await getUserDrink(slug);
+  const drink = await getDrink(slug);
 
   return (
     <div className="flex flex-col items-center min-h-screen text-customOrange">
