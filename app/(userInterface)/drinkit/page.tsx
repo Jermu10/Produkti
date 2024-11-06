@@ -3,7 +3,7 @@ import React from "react";
 import { getUserDrinks } from "../../actions/drink.actions";
 import Header from "@/components/Header";
 
-export const DrinksPage = async () => {
+const DrinksPage = async () => {
   const drinks = await getUserDrinks();
 
   return (
