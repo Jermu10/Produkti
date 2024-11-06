@@ -1,24 +1,18 @@
-import Button from "@/components/Button";
-
-import Link from "next/link";
-import { getDrinks } from "../actions/drink.actions";
+import { getDrinks } from "@/app/actions/drink.actions";
 import DrinkList from "@/components/DrinkList";
+import Header from "@/components/Header";
+import CreateDrinkModalForm from "@/app/admin/components/CreateDrinkModalForm";
 
 const DrinksPage = async () => {
   const drinks = await getDrinks();
 
   return (
     <>
-      <Button className="bg-customOrange px-3 py-1">
-        <Link href="/admin/drinks/create-drink">Luo drinkki</Link>
-      </Button>
-
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="bg-white p-8 rounded shadow-md w-full max-w-2xl">
-          <h1 className="text-3xl font-bold mb-6 text-center">Drinks List</h1>
-          <DrinkList drinks={drinks} />
-        </div>
+      <Header text="Drinkit" />
+      <div className="flex  justify-center">
+        <CreateDrinkModalForm />
       </div>
+      <DrinkList drinks={drinks} />
     </>
   );
 };

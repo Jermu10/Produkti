@@ -1,14 +1,10 @@
-import { getDrinks } from "./actions/drink.actions";
-import AdminDrinkList from "./components/AdminDrinkList";
+import Header from "@/components/Header";
+import { getDrinks } from "../actions/drink.actions";
 
 const AdminPage = async () => {
   const drinks = await getDrinks();
 
-  return (
-    <div>
-      <AdminDrinkList drinks={drinks} />
-    </div>
-  );
+  return <Header text="Terveppä terve" />;
 };
 
 export default AdminPage;

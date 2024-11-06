@@ -9,6 +9,7 @@ import {
   Button,
   useDisclosure,
   Input,
+  Textarea,
 } from "@nextui-org/react";
 import { useRef, FormEvent, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -41,46 +42,57 @@ const EditReviewsModalForm = ({ review }: { review: any }) => {
 
   return (
     <div>
-      <Button onClick={onOpen} color="primary">
-        Edit Review
+      <Button onClick={onOpen} color="secondary">
+        Muokkaa
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose} placement="top-center" size="xl">
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        placement="top-center"
+        size="2xl"
+      >
         <ModalContent>
           <form ref={formRef} onSubmit={handleSubmit}>
-            <ModalHeader>Edit Review</ModalHeader>
+            <ModalHeader>Muokkaa arvostelua</ModalHeader>
             <ModalBody>
               <Input
                 name="drink"
-                label="Drink Name"
+                label="Tuotteen nimi"
                 defaultValue={review.drink}
                 variant="bordered"
+                isRequired
               />
               <Input
                 name="rating"
-                label="Rating"
-                type="string"
+                label="Arvosana 1-5"
+                type="number"
                 defaultValue={review.rating}
                 variant="bordered"
+                isRequired
               />
-              <Input
+              <Textarea
                 name="introduction"
-                label="Introduction"
+                label="Johdanto"
                 defaultValue={review.introduction}
                 variant="bordered"
+                isRequired
+                size="sm"
               />
-              <Input
+              <Textarea
                 name="review"
-                label="Review"
+                label="Arvostelu"
                 defaultValue={review.review}
                 variant="bordered"
+                isRequired
+                size="lg"
               />
             </ModalBody>
             <ModalFooter>
               <Button variant="flat" color="danger" onClick={onClose}>
-                Cancel
+                Peruuta
               </Button>
               <Button type="submit" color="primary" disabled={isPending}>
-                {isPending ? "Updating..." : "Update Review"}
+                {isPending ? "Lataa..." : "Päivitä arvostelu"}
               </Button>
             </ModalFooter>
           </form>

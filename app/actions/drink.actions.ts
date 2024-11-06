@@ -1,16 +1,8 @@
+"use server";
 import prisma from "@/lib/db";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
-
-export async function getAllUserDrinks() {
-  const drinks = await prisma.drink.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-  if (drinks == null) return notFound();
-  return drinks;
-}
 
 export async function getUserDrinks() {
   const drinks = await prisma.drink.findMany({
@@ -49,54 +41,127 @@ export async function getDrinks() {
   return drinks;
 }
 
-export async function createDrink(formData: FormData) {
+export async function createDrink(formData: FormData): Promise<DrinkResult> {
+  const nameValue = formData.get("name") as string;
+  const categoryValue = formData.get("category") as string;
+  const ingredientsValue = JSON.parse(formData.get("ingredients") as string);
+  const instructionsValue = formData.get("instructions") as string;
+
+  if (!nameValue || !categoryValue || !ingredientsValue || !instructionsValue) {
+    return { error: "All fields are required" };
+  }
+
+  const name: string = nameValue.toString();
+  const slug: string = name
+    .toLowerCase()
+    .replace(/ä/g, "a")
+    .replace(/ö/g, "o")
+    .replace(/\s+/g, "-");
+  const category: string = categoryValue.toString();
+  const ingredients: string = JSON.parse(formData.get("ingredients") as string);
+  const instructions: string = instructionsValue.toString();
+
+  const { userId } = auth();
+
+  if (!userId) {
+    return { error: "User not found" };
+  }
+
+  const user = await clerkClient.users.getUser(userId);
+  const firstName = user?.firstName;
+
+  if (!firstName) {
+    return { error: "User not found" };
+  }
+
   try {
     await prisma.drink.create({
       data: {
-        name: formData.get("name") as string,
-        slug: (formData.get("name") as string)
-          .toLowerCase()
-          .replace(/ä/g, "a")
-          .replace(/ö/g, "o")
-          .replace(/\s+/g, "-"),
-        category: formData.get("category") as string,
-        ingredients: JSON.parse(formData.get("ingredients") as string),
-        instructions: formData.get("instructions") as string,
+        name,
+        slug,
+        category,
+        ingredients,
+        instructions,
       },
     });
-    redirect("/admin/drinkit");
+    revalidatePath(`/drinkit`);
+    revalidatePath(`/admin/drinkit`);
+
+    return { success: "Drink added" };
   } catch (error) {
-    console.error("Failed to create drink:", error);
+    return { error: "Failed to create drink" };
   }
 }
 
-export async function editDrink(formData: FormData) {
-  const id = formData.get("id") as string;
+export async function updateDrink(
+  id: string,
+  formData: FormData
+): Promise<UpdatedDrinkResult> {
+  const nameValue = formData.get("name") as string;
+  const categoryValue = formData.get("category") as string;
+  const ingredientsValue = JSON.parse(formData.get("ingredients") as string);
+  const instructionsValue = formData.get("instructions") as string;
+
+  if (!nameValue || !categoryValue || !ingredientsValue || !instructionsValue) {
+    return { error: "All fields are required" };
+  }
+
+  const name: string = nameValue.toString();
+  const slug: string = name
+    .toLowerCase()
+    .replace(/ä/g, "a")
+    .replace(/ö/g, "o")
+    .replace(/\s+/g, "-");
+  const category: string = categoryValue.toString();
+  const ingredients: string = JSON.parse(formData.get("ingredients") as string);
+  const instructions: string = instructionsValue.toString();
+
+  const { userId } = auth();
+
+  if (!userId) {
+    return { error: "User not found" };
+  }
+
+  const user = await clerkClient.users.getUser(userId);
+  const firstName = user?.firstName;
+
+  if (!firstName) {
+    return { error: "User not found" };
+  }
+
   try {
-    await prisma.drink.update({
+    const updatedDrink = await prisma.drink.update({
       where: { id },
       data: {
-        name: formData.get("name") as string,
-        slug: (formData.get("name") as string)
-          .toLowerCase()
-          .replace(/ä/g, "a")
-          .replace(/ö/g, "o")
-          .replace(/\s+/g, "-"),
-        category: formData.get("category") as string,
-        ingredients: JSON.parse(formData.get("ingredients") as string),
-        instructions: formData.get("instructions") as string,
+        name,
+        slug,
+        category,
+        ingredients,
+        instructions,
       },
     });
+    revalidatePath(`/drinkit`);
+    revalidatePath(`/admin/drinkit`);
+
+    return { data: updatedDrink };
   } catch (error) {
-    console.error("Failed to update drink:", error);
+    return { error: "Failed to create drink" };
   }
 }
 
 export async function deleteDrink(id: string) {
   try {
-    await prisma.drink.delete({ where: { id } });
-    revalidatePath("/admin/drinkit");
-  } catch (error) {
-    console.error("Failed to delete drink:", error);
+    const deletedDrink = await prisma.drink.delete({
+      where: { id },
+    });
+
+    revalidatePath(`/drinkit`);
+    revalidatePath(`/drinkit/${deletedDrink.slug}`);
+    revalidatePath(`/admin/drinkit`);
+    revalidatePath(`/admin/drinkit/${deletedDrink.slug}`);
+
+    return { success: "Drink deleted!" };
+  } catch (error: any) {
+    return { error: error.message };
   }
 }

@@ -1,10 +1,9 @@
-import prisma from "@/lib/db";
+import { getDrink } from "@/app/actions/drink.actions";
+import Header from "@/components/Header";
 
-import Button from "@/components/Button";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import DrinkForm from "@/components/DrinkForm";
-import { getDrink } from "../../actions/drink.actions";
+import DeleteDrinkButton from "../../components/DeleteDrinkButton";
+import UserIngredientsBox from "@/app/(userInterface)/components/UserIngredientsBox";
+import EditDrinkModal from "../../components/EditDrinkModalForm";
 
 const DrinkPage = async ({
   params: { slug },
@@ -13,19 +12,30 @@ const DrinkPage = async ({
 }) => {
   const drink = await getDrink(slug);
 
+  const textColor = drink.category === "drinkki" ? "text-customOrange" : "";
+
   return (
     <>
-      <Button className="bg-customOrange py-1 px-3 mb-5">
-        <Link href="/admin/">Takaisin</Link>
-      </Button>
-      <DrinkForm
-        initialData={{
-          ...drink,
-          ingredients: drink.ingredients as { [key: string]: string },
-        }}
-        isEditMode
-      />
-      ;
+      <div className={`flex flex-col items-center min-h-screen ${textColor}`}>
+        <Header text={drink.name} />
+        <div className="flex flex-col md:flex-row md:mt-20 justify-center text-2xl gap-16 w-full px-4 sm:px-6 lg:px-8 xl:px-12 ">
+          {drink.ingredients && (
+            <div className="mx-10">
+              <UserIngredientsBox
+                ingredients={drink.ingredients as Record<string, string>}
+              />
+            </div>
+          )}
+
+          <div className="w-full md:w-1/2 ">
+            <p>{drink.instructions}</p>
+          </div>
+        </div>
+      </div>
+      <div className="fixed bottom-4 right-4">
+        <DeleteDrinkButton DrinkId={drink.id} />
+        <EditDrinkModal drink={drink} />
+      </div>
     </>
   );
 };

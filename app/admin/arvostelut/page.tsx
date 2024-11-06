@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import NewReviewForm from "../components/ReviewsModalForm";
+import NewReviewForm from "../components/CreateReviewModalForm";
 import { getAllReviews } from "@/app/actions/reviews.actions";
 import ReviewCard from "@/components/ReviewCard";
 

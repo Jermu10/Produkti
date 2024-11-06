@@ -76,7 +76,10 @@ export async function getReview(slug: string) {
   if (review == null) return notFound();
   return review;
 }
-export async function updateReview(id: string, formData: FormData) {
+export async function updateReview(
+  id: string,
+  formData: FormData
+): Promise<UpdatedReviewResult> {
   const drink = formData.get("drink") as string;
   const slug: string = drink
     .toLowerCase()
@@ -99,9 +102,10 @@ export async function updateReview(id: string, formData: FormData) {
       },
     });
 
-    return { success: "Review updated" };
-  } catch (error: any) {
-    return { error: error.message };
+    return { data: updatedReview };
+  } catch (error) {
+    console.error("Failed to update review:", error);
+    return { error: "Failed to update review" };
   }
 }
 

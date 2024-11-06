@@ -15,7 +15,7 @@ import { UserButton } from "@clerk/nextjs";
 const AdminNavbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  const menuItems = ["drinkit", "mocktailit", "arvostelut"];
+  const menuItems = ["drinkit", "arvostelut"];
 
   return (
     <Navbar
