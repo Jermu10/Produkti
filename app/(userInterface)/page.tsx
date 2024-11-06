@@ -1,7 +1,9 @@
+import Header from "@/components/Header";
+
 const home = () => {
   return (
-    <div>
-      <div className="text-5xl">Home Page</div>
+    <div className="flex flex-col items-center min-h-screen">
+      <Header text="Drinkkilinkki" />
     </div>
   );
 };
