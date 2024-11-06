@@ -79,3 +79,39 @@ interface ReviewResult {
   success?: string;
   error?: string;
 }
+
+interface DrinkResult {
+  success?: string;
+  error?: string;
+}
+
+interface UpdatedReviewResult {
+  data?: Review;
+  error?: string;
+}
+
+interface UpdatedDrinkResult {
+  data?: Drink;
+  error?: string;
+}
+
+interface Drink {
+  id: string;
+  name: string;
+  category: string;
+  ingredients: any;
+  instructions: string;
+  slug: string;
+}
+
+interface Review {
+  id: string;
+  slug: string;
+  createdAt: Date;
+  updatedAt: Date;
+  creator: string | null;
+  drink: string;
+  review: string;
+  rating: string;
+  introduction: string;
+}

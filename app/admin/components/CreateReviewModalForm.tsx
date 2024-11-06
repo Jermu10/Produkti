@@ -1,5 +1,5 @@
 "use client";
-import { createReview } from "@/app/(userInterface)/actions/reviews.actions";
+import { createReview } from "@/app/actions/reviews.actions";
 import {
   Modal,
   ModalContent,
@@ -9,6 +9,7 @@ import {
   Button,
   useDisclosure,
   Input,
+  Textarea,
 } from "@nextui-org/react";
 import { useRef, FormEvent, useTransition } from "react";
 
@@ -22,11 +23,11 @@ const NewReviewForm = () => {
     if (formRef.current) {
       const formData = new FormData(formRef.current);
       startTransition(async () => {
-        const { error } = await createReview(formData);
+        const { success, error } = await createReview(formData);
         if (error) {
           console.error(error);
         } else {
-          console.log("Review added");
+          console.log(success);
           formRef.current?.reset();
           onClose();
         }
@@ -39,7 +40,12 @@ const NewReviewForm = () => {
       <Button onClick={onOpen} color="secondary" size="lg" className="p-5 m-10">
         Lisää arvostelu
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose} placement="top-center" size="xl">
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        placement="top-center"
+        size="2xl"
+      >
         <ModalContent>
           <form ref={formRef} onSubmit={handleSubmit}>
             <ModalHeader className="flex flex-col gap-1">
@@ -51,24 +57,29 @@ const NewReviewForm = () => {
                 autoFocus
                 label="Tuotteen nimi"
                 variant="bordered"
+                isRequired
               />
               <Input
                 name="rating"
                 label="Arvosana 1-5"
                 type="number"
                 variant="bordered"
+                isRequired
               />
-              <Input
+              <Textarea
                 name="introduction"
                 label="Johdanto"
-                type="textarea"
                 variant="bordered"
+                isRequired
+                size="sm"
               />
-              <Input
+
+              <Textarea
                 name="review"
                 label="Arvostelu"
-                type="textarea"
                 variant="bordered"
+                isRequired
+                size="lg"
               />
             </ModalBody>
             <ModalFooter>
