@@ -18,10 +18,6 @@ import {
 import { updateDrink } from "@/app/actions/drink.actions";
 import { useRouter } from "next/navigation";
 
-interface EditDrinkModalProps {
-  drink: Drink;
-}
-
 const EditDrinkModal: React.FC<EditDrinkModalProps> = ({ drink }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const formRef = useRef<HTMLFormElement>(null);

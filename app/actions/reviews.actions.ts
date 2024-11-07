@@ -14,7 +14,9 @@ export async function getAllReviews() {
   return reviews;
 }
 
-export async function createReview(formData: FormData): Promise<ReviewResult> {
+export async function createReview(
+  formData: FormData
+): Promise<CreatingResult> {
   const drinkValue = formData.get("drink");
   const ratingValue = formData.get("rating");
   const introductionValue = formData.get("introduction");

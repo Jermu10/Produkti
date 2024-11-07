@@ -7,9 +7,6 @@ const DrinkCard: React.FC<DrinkItemProps> = ({ drink }) => {
   const isDrinkki = drink.category === "drinkki";
   const borderColor = isDrinkki ? "border-customOrange" : "border-customGreen";
   const textColor = isDrinkki ? "text-customOrange" : "text-customGreen";
-  // const href = isDrinkki
-  //   ? `/drinkit/${drink.slug}`
-  //   : `/mocktailit/${drink.slug}`;
 
   const pathname = usePathname();
 

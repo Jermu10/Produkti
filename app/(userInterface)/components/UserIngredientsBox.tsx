@@ -1,9 +1,5 @@
 import React from "react";
 
-interface IngredientsBoxProps {
-  ingredients: Record<string, string>;
-}
-
 const UserIngredientsBox: React.FC<IngredientsBoxProps> = ({ ingredients }) => {
   return (
     <div className="w-full">
@@ -23,19 +19,3 @@ const UserIngredientsBox: React.FC<IngredientsBoxProps> = ({ ingredients }) => {
 };
 
 export default UserIngredientsBox;
-
-// const UserIngredientsBox: React.FC<IngredientsBoxProps> = ({ ingredients }) => {
-//   return (
-//     <div>
-//       {Object.entries(ingredients).map(([key, value], index) => (
-//         <div key={index}>
-//           <p>
-//             {key} : {value}
-//           </p>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-
-// export default UserIngredientsBox;

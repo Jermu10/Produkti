@@ -41,7 +41,7 @@ export async function getDrinks() {
   return drinks;
 }
 
-export async function createDrink(formData: FormData): Promise<DrinkResult> {
+export async function createDrink(formData: FormData): Promise<CreatingResult> {
   const nameValue = formData.get("name") as string;
   const categoryValue = formData.get("category") as string;
   const ingredientsValue = JSON.parse(formData.get("ingredients") as string);
