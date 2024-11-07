@@ -10,9 +10,11 @@ const DrinksPage = async () => {
     <>
       <Header text="Drinkit" />
       <div className="flex  justify-center">
+        <DrinkList drinks={drinks} />
+      </div>
+      <div className="fixed bottom-4 right-4">
         <CreateDrinkModalForm />
       </div>
-      <DrinkList drinks={drinks} />
     </>
   );
 };

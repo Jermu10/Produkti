@@ -62,12 +62,7 @@ const CreateDrinkModalForm = () => {
 
   return (
     <div>
-      <Button
-        onClick={onOpen}
-        color="secondary"
-        size="lg"
-        className="fixed bottom-4 right-4"
-      >
+      <Button onClick={onOpen} color="secondary" size="lg" className="p-5">
         Lisää drinkki
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} placement="top-center" size="xl">
