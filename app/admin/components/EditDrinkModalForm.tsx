@@ -78,7 +78,7 @@ const EditDrinkModal: React.FC<EditDrinkModalProps> = ({ drink }) => {
 
   return (
     <div>
-      <Button onClick={onOpen} color="primary" size="lg">
+      <Button onClick={onOpen} color="secondary">
         Muokkaa
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} placement="top-center" size="xl">

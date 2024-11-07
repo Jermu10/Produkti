@@ -37,7 +37,7 @@ const NewReviewForm = () => {
 
   return (
     <div>
-      <Button onClick={onOpen} color="secondary" size="lg" className="p-5 m-10">
+      <Button onClick={onOpen} color="secondary" size="lg" className="p-5 ">
         Lisää arvostelu
       </Button>
       <Modal
