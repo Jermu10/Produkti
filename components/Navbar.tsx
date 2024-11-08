@@ -28,7 +28,7 @@ const CustomNavbar: React.FC = () => {
         />
         <NavbarBrand>
           <Link color="foreground" href="/" size="lg">
-            <p>DRINKKILINKKI</p>
+            <p>Drinkkilinkki</p>
           </Link>
         </NavbarBrand>
       </NavbarContent>

@@ -61,6 +61,10 @@ interface UpdatedReviewResult {
   error?: string;
 }
 
+interface ReviewListProps {
+  reviews: Review[];
+}
+
 interface UpdatedDrinkResult {
   data?: Drink;
   error?: string;
