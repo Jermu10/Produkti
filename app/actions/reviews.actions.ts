@@ -17,36 +17,31 @@ export async function getAllReviews() {
 export async function createReview(
   formData: FormData
 ): Promise<CreatingResult> {
-  const drinkValue = formData.get("drink");
-  const ratingValue = formData.get("rating");
-  const introductionValue = formData.get("introduction");
-  const reviewValue = formData.get("review");
+  const drink = formData.get("drink") as string;
 
-  if (!drinkValue || !ratingValue || !introductionValue || !reviewValue) {
-    return { error: "All fields are required" };
-  }
+  const rating = formData.get("rating") as string;
+  const introduction = formData.get("introduction") as string;
+  const review = formData.get("review") as string;
 
-  const drink: string = drinkValue.toString();
   const slug: string = drink
     .toLowerCase()
     .replace(/ä/g, "a")
     .replace(/ö/g, "o")
     .replace(/\s+/g, "-");
-  const rating: string = ratingValue.toString();
-  const introduction: string = introductionValue.toString();
-  const review: string = reviewValue.toString();
+
+  if (!drink || !rating || !introduction || !review) {
+    return { error: "All fields are required" };
+  }
 
   const { userId } = auth();
 
-  if (!userId) {
-    return { error: "User not found" };
-  }
+  let creatorName = "unknown";
 
-  const user = await clerkClient.users.getUser(userId);
-  const firstName = user?.firstName;
-
-  if (!firstName) {
-    return { error: "User not found" };
+  if (userId) {
+    const user = await clerkClient.users.getUser(userId);
+    if (user?.firstName) {
+      creatorName = user.firstName;
+    }
   }
 
   try {
@@ -57,15 +52,16 @@ export async function createReview(
         rating,
         introduction,
         review,
-        creator: firstName,
+        creator: creatorName,
       },
     });
     revalidatePath(`/arvostelut`);
     revalidatePath(`/admin/arvostelut`);
 
-    return { success: "Review added" };
-  } catch (error) {
-    return { error: "Review not added" };
+    return { success: "Arvostelu lisätty!" };
+  } catch (err: any) {
+    console.error("Arvostelun luominen epäonnistui:", err);
+    return { error: err.message || "Arvostelun luominen epäonnistui" };
   }
 }
 
@@ -78,6 +74,15 @@ export async function getReview(slug: string) {
   if (review == null) return notFound();
   return review;
 }
+
+export const getLatestReviews = async (limit: number) => {
+  return await prisma.review.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: limit,
+  });
+};
 export async function updateReview(
   id: string,
   formData: FormData
@@ -92,6 +97,10 @@ export async function updateReview(
   const introduction = formData.get("introduction") as string;
   const review = formData.get("review") as string;
 
+  if (!drink || !rating || !introduction || !review) {
+    return { error: "All fields are required" };
+  }
+
   try {
     const updatedReview = await prisma.review.update({
       where: { id },
@@ -105,9 +114,9 @@ export async function updateReview(
     });
 
     return { data: updatedReview };
-  } catch (error) {
-    console.error("Failed to update review:", error);
-    return { error: "Failed to update review" };
+  } catch (error: any) {
+    console.error("Virhe arvostelua päivitettäessä:", error);
+    return { error: error.message || "Arvostelun päivittäminen epäonnistui." };
   }
 }
 
@@ -122,8 +131,9 @@ export async function deleteReview(id: string) {
     revalidatePath(`/admin/arvostelut`);
     revalidatePath(`/admin/arvostelut/${deletedReview.slug}`);
 
-    return { success: "Review deleted!" };
+    return { success: "Arvostelu poistettu" };
   } catch (error: any) {
-    return { error: error.message };
+    console.error("Virhe poistaessa arvostelua: ", error);
+    return { error: error.message || "Arvostelun poistaminen epäonnistui." };
   }
 }

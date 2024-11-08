@@ -14,6 +14,7 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { createDrink } from "@/app/actions/drink.actions";
+import { toast } from "react-toastify";
 
 const CreateDrinkModalForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -44,17 +45,30 @@ const CreateDrinkModalForm = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (formRef.current) {
+      if (Object.keys(ingredients).length === 0) {
+        toast.error("Lisää ainakin yksi ainesosa!");
+        return;
+      }
+
       const formData = new FormData(formRef.current);
       formData.set("ingredients", JSON.stringify(ingredients));
+
       startTransition(async () => {
-        const { success, error } = await createDrink(formData);
-        if (error) {
-          console.error(error);
-        } else {
-          console.log(success);
-          formRef.current?.reset();
-          setIngredients({});
-          onClose();
+        try {
+          const { success, error } = await createDrink(formData);
+          if (error) {
+            console.error(error);
+            toast.error("Virhe drinkin luomisessa.");
+          } else {
+            console.log(success);
+            toast.success(success);
+            formRef.current?.reset();
+            setIngredients({});
+            onClose();
+          }
+        } catch (err) {
+          console.error("Virhe:", err);
+          toast.error("Virhe drinkin luomisessa.");
         }
       });
     }
@@ -73,13 +87,14 @@ const CreateDrinkModalForm = () => {
               <Input
                 name="name"
                 label="Drinkin nimi"
+                placeholder="Lisää drinkin nimi"
                 variant="bordered"
                 required
               />
               <Select
                 name="category"
                 label="Kategoria"
-                placeholder="Select category"
+                placeholder="Valitse kategoria"
                 variant="bordered"
                 required
               >
@@ -92,7 +107,7 @@ const CreateDrinkModalForm = () => {
               </Select>
 
               <div>
-                <h4>Ingredients</h4>
+                <h4>Ainesosat</h4>
                 <div style={{ display: "flex", gap: "10px" }}>
                   <Input
                     value={ingredientName}
@@ -106,7 +121,7 @@ const CreateDrinkModalForm = () => {
                     placeholder="Määrä"
                     variant="bordered"
                   />
-                  <Button color="secondary" onClick={handleAddIngredient}>
+                  <Button color="primary" onClick={handleAddIngredient}>
                     Lisää
                   </Button>
                 </div>
@@ -128,14 +143,14 @@ const CreateDrinkModalForm = () => {
 
               <Textarea
                 name="instructions"
-                label="Instructions"
-                placeholder="Enter instructions"
+                label="Valmistusohjeet"
+                placeholder="Lisää valmistusohjeet"
                 required
                 variant="bordered"
               />
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" type="submit">
+              <Button color="secondary" type="submit">
                 Luo drinkki
               </Button>
             </ModalFooter>

@@ -1,5 +1,3 @@
-// EditDrinkModal.tsx
-
 "use client";
 import React, { useState, useRef, FormEvent, startTransition } from "react";
 import {
@@ -17,6 +15,7 @@ import {
 } from "@nextui-org/react";
 import { updateDrink } from "@/app/actions/drink.actions";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const EditDrinkModal: React.FC<EditDrinkModalProps> = ({ drink }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -29,8 +28,26 @@ const EditDrinkModal: React.FC<EditDrinkModalProps> = ({ drink }) => {
   const [ingredients, setIngredients] = useState<{ [key: string]: string }>(
     drink.ingredients || {}
   );
-  const router = useRouter();
   const [instructions, setInstructions] = useState(drink.instructions);
+
+  const resetForm = () => {
+    setName(drink.name);
+    setCategory(drink.category);
+    setInstructions(drink.instructions);
+    setIngredients(drink.ingredients || {});
+    setIngredientName("");
+    setIngredientAmount("");
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
+  const router = useRouter();
 
   const handleAddIngredient = () => {
     if (ingredientName && ingredientAmount) {
@@ -54,19 +71,32 @@ const EditDrinkModal: React.FC<EditDrinkModalProps> = ({ drink }) => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (formRef.current) {
+      if (Object.keys(ingredients).length === 0) {
+        toast.error("Lisää ainakin yksi ainesosa!");
+        return;
+      }
+
       const formData = new FormData(formRef.current);
       formData.set("ingredients", JSON.stringify(ingredients));
-      startTransition(async () => {
-        const { data, error } = await updateDrink(drink.id, formData);
-        if (error) {
-          console.error(error);
-        } else {
-          console.log("Review updated");
-          onClose();
 
-          if (data) {
-            router.push(`/admin/drinkit/${data.slug}`);
+      startTransition(async () => {
+        try {
+          const { data, error } = await updateDrink(drink.id, formData);
+          if (error) {
+            console.error(error);
+            toast.error(error);
+          } else {
+            console.log("Drinkki päivitetty");
+            toast.success("Drinkki päivitetty!");
+            onClose();
+
+            if (data) {
+              router.push(`/admin/drinkit/${data.slug}`);
+            }
           }
+        } catch (err) {
+          console.error("Error", err);
+          toast.error("Virhe tapahtui, yritä uudelleen");
         }
       });
     }
@@ -77,7 +107,12 @@ const EditDrinkModal: React.FC<EditDrinkModalProps> = ({ drink }) => {
       <Button onClick={onOpen} color="secondary">
         Muokkaa
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose} placement="top-center" size="xl">
+      <Modal
+        isOpen={isOpen}
+        onClose={handleClose}
+        placement="top-center"
+        size="xl"
+      >
         <ModalContent>
           <form ref={formRef} onSubmit={handleSubmit}>
             <ModalHeader>Muokkaa</ModalHeader>
@@ -115,16 +150,16 @@ const EditDrinkModal: React.FC<EditDrinkModalProps> = ({ drink }) => {
                   <Input
                     value={ingredientName}
                     onChange={(e) => setIngredientName(e.target.value)}
-                    placeholder="Ingredient"
+                    placeholder="Ainesosa"
                     variant="bordered"
                   />
                   <Input
                     value={ingredientAmount}
                     onChange={(e) => setIngredientAmount(e.target.value)}
-                    placeholder="Amount"
+                    placeholder="Määrä"
                     variant="bordered"
                   />
-                  <Button color="secondary" onClick={handleAddIngredient}>
+                  <Button color="primary" onClick={handleAddIngredient}>
                     Lisää
                   </Button>
                 </div>
@@ -146,8 +181,7 @@ const EditDrinkModal: React.FC<EditDrinkModalProps> = ({ drink }) => {
 
               <Textarea
                 name="instructions"
-                label="Instructions"
-                placeholder="Enter instructions"
+                label="Valmistusohjeet"
                 required
                 variant="bordered"
                 value={instructions}
@@ -155,7 +189,7 @@ const EditDrinkModal: React.FC<EditDrinkModalProps> = ({ drink }) => {
               />
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" type="submit">
+              <Button color="secondary" type="submit">
                 Tallenna
               </Button>
             </ModalFooter>

@@ -2,7 +2,7 @@
 import prisma from "@/lib/db";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 export async function getUserDrinks() {
   const drinks = await prisma.drink.findMany({
@@ -41,37 +41,42 @@ export async function getDrinks() {
   return drinks;
 }
 
-export async function createDrink(formData: FormData): Promise<CreatingResult> {
-  const nameValue = formData.get("name") as string;
-  const categoryValue = formData.get("category") as string;
-  const ingredientsValue = JSON.parse(formData.get("ingredients") as string);
-  const instructionsValue = formData.get("instructions") as string;
+export const getNewestDrinks = async (limit: number) => {
+  return await prisma.drink.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: limit,
+  });
+};
 
-  if (!nameValue || !categoryValue || !ingredientsValue || !instructionsValue) {
-    return { error: "All fields are required" };
+export async function createDrink(formData: FormData): Promise<CreatingResult> {
+  const name = formData.get("name") as string;
+  const category = formData.get("category") as string;
+  const instructions = formData.get("instructions") as string;
+
+  const ingredientsData = formData.get("ingredients") as string;
+  const ingredients = JSON.parse(ingredientsData);
+
+  if (!name || !category || !ingredients || !instructions) {
+    return { error: "Täytä kaikki kohdat dumbass" };
   }
 
-  const name: string = nameValue.toString();
   const slug: string = name
     .toLowerCase()
     .replace(/ä/g, "a")
     .replace(/ö/g, "o")
     .replace(/\s+/g, "-");
-  const category: string = categoryValue.toString();
-  const ingredients: string = JSON.parse(formData.get("ingredients") as string);
-  const instructions: string = instructionsValue.toString();
 
   const { userId } = auth();
 
-  if (!userId) {
-    return { error: "User not found" };
-  }
+  let creatorName = "unknown";
 
-  const user = await clerkClient.users.getUser(userId);
-  const firstName = user?.firstName;
-
-  if (!firstName) {
-    return { error: "User not found" };
+  if (userId) {
+    const user = await clerkClient.users.getUser(userId);
+    if (user?.firstName) {
+      creatorName = user.firstName;
+    }
   }
 
   try {
@@ -82,14 +87,17 @@ export async function createDrink(formData: FormData): Promise<CreatingResult> {
         category,
         ingredients,
         instructions,
+        creator: creatorName,
       },
     });
     revalidatePath(`/drinkit`);
+    revalidatePath(`/moctailit`);
     revalidatePath(`/admin/drinkit`);
 
-    return { success: "Drink added" };
-  } catch (error) {
-    return { error: "Failed to create drink" };
+    return { success: "Drinkki lisätty" };
+  } catch (err: any) {
+    console.error("Virhe drinkkiä lisättäessä:", err);
+    return { error: err.message || "Drinkin lisäys epäonnistui." };
   }
 }
 
@@ -97,37 +105,22 @@ export async function updateDrink(
   id: string,
   formData: FormData
 ): Promise<UpdatedDrinkResult> {
-  const nameValue = formData.get("name") as string;
-  const categoryValue = formData.get("category") as string;
-  const ingredientsValue = JSON.parse(formData.get("ingredients") as string);
-  const instructionsValue = formData.get("instructions") as string;
+  const name = formData.get("name") as string;
+  const category = formData.get("category") as string;
+  const instructions = formData.get("instructions") as string;
 
-  if (!nameValue || !categoryValue || !ingredientsValue || !instructionsValue) {
-    return { error: "All fields are required" };
+  const ingredientsData = formData.get("ingredients") as string;
+  const ingredients = JSON.parse(ingredientsData);
+
+  if (!name || !category || !ingredientsData || !instructions) {
+    return { error: "Kaikki kentät ovat pakollisia." };
   }
 
-  const name: string = nameValue.toString();
   const slug: string = name
     .toLowerCase()
     .replace(/ä/g, "a")
     .replace(/ö/g, "o")
     .replace(/\s+/g, "-");
-  const category: string = categoryValue.toString();
-  const ingredients: string = JSON.parse(formData.get("ingredients") as string);
-  const instructions: string = instructionsValue.toString();
-
-  const { userId } = auth();
-
-  if (!userId) {
-    return { error: "User not found" };
-  }
-
-  const user = await clerkClient.users.getUser(userId);
-  const firstName = user?.firstName;
-
-  if (!firstName) {
-    return { error: "User not found" };
-  }
 
   try {
     const updatedDrink = await prisma.drink.update({
@@ -140,12 +133,17 @@ export async function updateDrink(
         instructions,
       },
     });
-    revalidatePath(`/drinkit`);
-    revalidatePath(`/admin/drinkit`);
+    await Promise.all([
+      revalidatePath(`/drinkit`),
+      revalidatePath(`/admin/drinkit`),
+      revalidatePath(`/drinkit/${slug}`),
+      revalidatePath(`/admin/drinkit/${slug}`),
+    ]);
 
     return { data: updatedDrink };
-  } catch (error) {
-    return { error: "Failed to create drink" };
+  } catch (err: any) {
+    console.error("Virhe drinkkiä päivittäessä:", err);
+    return { error: err.message || "Drinkin päivitys epäonnistui." };
   }
 }
 
@@ -156,12 +154,12 @@ export async function deleteDrink(id: string) {
     });
 
     revalidatePath(`/drinkit`);
-    revalidatePath(`/drinkit/${deletedDrink.slug}`);
+    revalidatePath(`/moctailit`);
     revalidatePath(`/admin/drinkit`);
-    revalidatePath(`/admin/drinkit/${deletedDrink.slug}`);
 
-    return { success: "Drink deleted!" };
-  } catch (error: any) {
-    return { error: error.message };
+    return { success: "Drinkki poistettu!" };
+  } catch (err: any) {
+    console.error("Virhe drinkkiä lisättäessä:", err);
+    return { error: err.message || "Drinkin poisto epäonnistui." };
   }
 }

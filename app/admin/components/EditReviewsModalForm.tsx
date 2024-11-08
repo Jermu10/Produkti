@@ -13,6 +13,7 @@ import {
 } from "@nextui-org/react";
 import { useRef, FormEvent, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const EditReviewsModalForm = ({ review }: { review: any }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -25,16 +26,25 @@ const EditReviewsModalForm = ({ review }: { review: any }) => {
     if (formRef.current) {
       const formData = new FormData(formRef.current);
       startTransition(async () => {
-        const { data, error } = await updateReview(review.id, formData);
-        if (error) {
-          console.error(error);
-        } else {
-          console.log("Review updated");
-          onClose();
+        try {
+          const { data, error } = await updateReview(review.id, formData);
+          if (error) {
+            console.error(error);
+            toast.error(error);
+          } else {
+            console.log("Arvostelu päivitetty");
+            toast.success("Arvostelu päivitetty!");
+            onClose();
 
-          if (data) {
-            router.push(`/admin/arvostelut/${data.slug}`);
+            if (data) {
+              router.push(`/admin/arvostelut/${data.slug}`);
+            }
           }
+        } catch (err) {
+          console.error("Virhe:", err);
+          toast.error(
+            "Viestin lähettäminen epäonnistui. Yritä myöhemmin uudelleen."
+          );
         }
       });
     }
@@ -60,7 +70,7 @@ const EditReviewsModalForm = ({ review }: { review: any }) => {
                 label="Tuotteen nimi"
                 defaultValue={review.drink}
                 variant="bordered"
-                isRequired
+                required
               />
               <Input
                 name="rating"
@@ -68,14 +78,14 @@ const EditReviewsModalForm = ({ review }: { review: any }) => {
                 type="number"
                 defaultValue={review.rating}
                 variant="bordered"
-                isRequired
+                required
               />
               <Textarea
                 name="introduction"
                 label="Johdanto"
                 defaultValue={review.introduction}
                 variant="bordered"
-                isRequired
+                required
                 size="sm"
               />
               <Textarea
@@ -83,7 +93,7 @@ const EditReviewsModalForm = ({ review }: { review: any }) => {
                 label="Arvostelu"
                 defaultValue={review.review}
                 variant="bordered"
-                isRequired
+                required
                 size="lg"
               />
             </ModalBody>
@@ -92,7 +102,7 @@ const EditReviewsModalForm = ({ review }: { review: any }) => {
                 Peruuta
               </Button>
               <Button type="submit" color="primary" disabled={isPending}>
-                {isPending ? "Lataa..." : "Päivitä arvostelu"}
+                {isPending ? "Lataa..." : "Tallenna"}
               </Button>
             </ModalFooter>
           </form>
