@@ -2,6 +2,7 @@ import { Card, CardHeader, CardBody, Image, Divider } from "@nextui-org/react";
 import { formatCardIngredients } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import defaultImage from "@/lib/images/defaultImage.jpg";
 
 const DrinkCard: React.FC<DrinkItemProps> = ({ drink }) => {
   const isDrinkki = drink.category === "drinkki";
@@ -9,12 +10,14 @@ const DrinkCard: React.FC<DrinkItemProps> = ({ drink }) => {
   const textColor = isDrinkki ? "text-customOrange" : "text-customGreen";
 
   const pathname = usePathname();
+  const basePath =
+    pathname === "/" ? (isDrinkki ? "/drinkit" : "/mocktailit") : pathname;
 
   return (
-    <Card className={`items-center border-5 ${borderColor}`}>
-      <Link href={`${pathname}/${drink.slug}`}>
+    <Card className={` m-2 items-center border-5 w-72 h-72 ${borderColor}`}>
+      <Link href={`${basePath}/${drink.slug}`}>
         <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-          <p className={`font-bold text-3xl ${textColor}`}>{drink.name}</p>
+          <p className={` text-3xl ${textColor}`}>{drink.name}</p>
           <Divider />
           <p className={`text-xl ${textColor}`}>
             {formatCardIngredients(drink.ingredients)}
@@ -24,8 +27,9 @@ const DrinkCard: React.FC<DrinkItemProps> = ({ drink }) => {
           <Image
             alt="Card background"
             className="object-cover rounded-xl"
-            src="https://nextui.org/images/hero-card-complete.jpeg"
-            width={270}
+            src={defaultImage.src}
+            width={250}
+            height={150}
           />
         </CardBody>
       </Link>

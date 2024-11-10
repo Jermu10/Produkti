@@ -12,7 +12,7 @@ const AdminReview = async ({
   const review = await getReview(slug);
 
   return (
-    <>
+    <div className="text-red-400">
       <Header text={review.drink} />
       <div className="flex flex-col md:flex-row gap-4 p-4 justify-between items-start">
         <div className="md:w-1/4 flex flex-col items-center">
@@ -33,7 +33,7 @@ const AdminReview = async ({
 
         <DeleteReviewButton reviewId={review.id} />
       </div>
-    </>
+    </div>
   );
 };
 
