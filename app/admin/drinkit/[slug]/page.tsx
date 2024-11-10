@@ -35,7 +35,7 @@ const DrinkPage = async ({
       <div className="fixed bottom-4 right-4">
         <EditDrinkModal drink={drink} />
 
-        <DeleteDrinkButton DrinkId={drink.id} />
+        <DeleteDrinkButton drinkId={drink.id} />
       </div>
     </>
   );

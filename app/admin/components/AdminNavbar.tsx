@@ -29,7 +29,7 @@ const AdminNavbar: React.FC = () => {
         />
         <NavbarBrand>
           <Link color="foreground" href="/admin" size="lg">
-            <p>DRINKKILINKKI</p>
+            <p>Drinkkilinkki</p>
           </Link>
         </NavbarBrand>
       </NavbarContent>

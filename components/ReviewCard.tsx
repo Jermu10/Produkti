@@ -12,10 +12,11 @@ import { usePathname } from "next/navigation";
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
   const pathname = usePathname();
+  const basePath = pathname === "/" ? "/arvostelut" : pathname;
 
   return (
-    <Card className="max-w-[300px] m-2 ">
-      <Link href={`${pathname}/${review.slug}`}>
+    <Card className="max-w-[300px] m-2 text-red-400">
+      <Link href={`${basePath}/${review.slug}`}>
         <CardHeader className="flex gap-3">
           <div className="flex flex-col">
             <p className="text-4xl">{review.drink}</p>

@@ -4,20 +4,28 @@ import { useRouter } from "next/navigation";
 import { Button } from "@nextui-org/react";
 import { useTransition } from "react";
 import { deleteDrink } from "@/app/actions/drink.actions";
+import { toast } from "react-toastify";
 
-const DeleteDrinkButton = ({ DrinkId }: { DrinkId: string }) => {
+const DeleteDrinkButton = ({ drinkId }: { drinkId: string }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
-    if (confirm("Are you sure you want to delete this review?")) {
+    if (confirm("Haluutko oikeest poistaa drinkin???")) {
       startTransition(async () => {
-        const { success, error } = await deleteDrink(DrinkId);
-        if (error) {
-          console.error(error);
-        } else {
-          console.log(success);
-          router.push("/admin/drinkit");
+        try {
+          const { success, error } = await deleteDrink(drinkId);
+          if (error) {
+            console.error(error);
+            toast.error(error);
+          } else {
+            console.log(success);
+            toast.success(success);
+            router.push("/admin/drinkit");
+          }
+        } catch (err) {
+          console.error("Virhe:", err);
+          toast.error("Virhe drinkin poistamisessa.");
         }
       });
     }
