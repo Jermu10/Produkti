@@ -7,14 +7,14 @@ const ReviewPage = async () => {
   const reviews = await getAllReviews();
 
   return (
-    <>
+    <div className="text-red-400">
       <Header text="Arvostelut" />
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 justify-center ">
+      <div className=" flex flex-wrap justify-center gap-4 ">
         {reviews.map((review) => (
           <ReviewCard key={review.id} review={review} />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

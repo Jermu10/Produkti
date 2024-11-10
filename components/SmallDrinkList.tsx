@@ -5,7 +5,7 @@ import React from "react";
 const SmallDrinkList: React.FC<DrinkListProps> = ({ drinks }) => {
   return (
     <div className="w-full max-w-sm bg-white shadow-md rounded-lg p-4 mt-4">
-      <h2 className="text-2xl font-semibold ">
+      <h2 className="text-2xl ">
         <span className="text-customOrange">Uusimmat drinkit</span> ja moctailit
       </h2>
       <Divider />

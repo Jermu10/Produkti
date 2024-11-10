@@ -10,7 +10,7 @@ const MoctailPage = async () => {
     <>
       <Header text="Moctailit" />
       <div>
-        <DrinkList drinks={moctails} />
+        <DrinkList styles={"flex flex-wrap justify-center"} drinks={moctails} />
       </div>
     </>
   );

@@ -21,6 +21,7 @@ interface Review {
 
 interface DrinkListProps {
   drinks: Drink[];
+  styles?: string;
 }
 
 interface DrinkItemProps {
