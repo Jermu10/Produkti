@@ -55,8 +55,12 @@ export async function createReview(
         creator: creatorName,
       },
     });
-    revalidatePath(`/arvostelut`);
-    revalidatePath(`/admin/arvostelut`);
+    await Promise.all([
+      revalidatePath(`/arvostelut`),
+      revalidatePath(`/admin/arvostelut`),
+      revalidatePath(`/`),
+      revalidatePath(`/admin/`),
+    ]);
 
     return { success: "Arvostelu lisätty!" };
   } catch (err: any) {
@@ -112,6 +116,14 @@ export async function updateReview(
         review,
       },
     });
+    await Promise.all([
+      revalidatePath(`/arvostelut/${slug}`),
+      revalidatePath(`/admin/arvostelut/${slug}`),
+      revalidatePath(`/arvostelut`),
+      revalidatePath(`/admin/arvostelut`),
+      revalidatePath(`/`),
+      revalidatePath(`/admin/`),
+    ]);
 
     return { data: updatedReview };
   } catch (error: any) {
@@ -126,10 +138,12 @@ export async function deleteReview(id: string) {
       where: { id },
     });
 
-    revalidatePath(`/arvostelut`);
-    revalidatePath(`/arvostelut/${deletedReview.slug}`);
-    revalidatePath(`/admin/arvostelut`);
-    revalidatePath(`/admin/arvostelut/${deletedReview.slug}`);
+    await Promise.all([
+      revalidatePath(`/arvostelut`),
+      revalidatePath(`/admin/arvostelut`),
+      revalidatePath(`/`),
+      revalidatePath(`/admin/`),
+    ]);
 
     return { success: "Arvostelu poistettu" };
   } catch (error: any) {
