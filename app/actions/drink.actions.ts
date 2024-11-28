@@ -90,9 +90,18 @@ export async function createDrink(formData: FormData): Promise<CreatingResult> {
         creator: creatorName,
       },
     });
-    revalidatePath(`/drinkit`);
-    revalidatePath(`/moctailit`);
-    revalidatePath(`/admin/drinkit`);
+    await Promise.all([
+      revalidatePath(`/moctailit`),
+      revalidatePath(`/drinkit`),
+      revalidatePath(`/admin/drinkit`),
+      revalidatePath(`/admin/mocktailit`),
+      revalidatePath(`/drinkit/${slug}`),
+      revalidatePath(`/mocktailit/${slug}`),
+      revalidatePath(`/admin/drinkit/${slug}`),
+      revalidatePath(`/admin/mocktailit/${slug}`),
+      revalidatePath(`/`),
+      revalidatePath(`/admin`),
+    ]);
 
     return { success: "Drinkki lisätty" };
   } catch (err: any) {
@@ -138,6 +147,12 @@ export async function updateDrink(
       revalidatePath(`/admin/drinkit`),
       revalidatePath(`/drinkit/${slug}`),
       revalidatePath(`/admin/drinkit/${slug}`),
+      revalidatePath(`/`),
+      revalidatePath(`/admin`),
+      revalidatePath(`/drinkit/${slug}`),
+      revalidatePath(`/mocktailit/${slug}`),
+      revalidatePath(`/admin/drinkit/${slug}`),
+      revalidatePath(`/admin/mocktailit/${slug}`),
     ]);
 
     return { data: updatedDrink };
@@ -152,11 +167,14 @@ export async function deleteDrink(id: string) {
     const deletedDrink = await prisma.drink.delete({
       where: { id },
     });
-
-    revalidatePath(`/drinkit`);
-    revalidatePath(`/moctailit`);
-    revalidatePath(`/admin/drinkit`);
-
+    await Promise.all([
+      revalidatePath(`/drinkit`),
+      revalidatePath(`/moctailit`),
+      revalidatePath(`/admin/drinkit`),
+      revalidatePath(`/admin/mocktailit`),
+      revalidatePath(`/`),
+      revalidatePath(`/admin`),
+    ]);
     return { success: "Drinkki poistettu!" };
   } catch (err: any) {
     console.error("Virhe drinkkiä lisättäessä:", err);
