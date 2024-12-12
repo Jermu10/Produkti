@@ -28,7 +28,7 @@ const DrinkPage = async ({
           )}
 
           <div className="w-full md:w-1/2 ">
-            <p>{drink.instructions}</p>
+            <p className="whitespace-pre-line">{drink.instructions}</p>
           </div>
         </div>
       </div>

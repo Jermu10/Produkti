@@ -26,9 +26,9 @@ const ReviewPage = async ({
             </div>
           </div>
           <div className="md:w-1/2 text-2xl ml-auto">
-            <p>{review.introduction}</p>
+            <p className="whitespace-pre-line">{review.introduction}</p>
             <br />
-            <p>{review.review}</p>
+            <p className="whitespace-pre-line">{review.review}</p>
           </div>
         </div>
       </div>
