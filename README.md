@@ -1,1 +1,1 @@
-
+Tämän projektin tuotosta pääsee ihastelemaan osoitteessa [drinkkilinkki.com](https://drinkkilinkki.com). Huom. Tätä sivua on jatkokehitetty uudessa repositoriossa, joten kaikkia ei välttämättä ole samoin sivulla, kuin tässä repositoriossa ja opinnäytetyössä.
